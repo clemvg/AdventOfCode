@@ -1,4 +1,6 @@
-"""Day 2: Gift Shop."""
+"""Day 2: Gift Shop.
+
+Learning: the range() param"""
 from typing import List, Tuple
 from utils import common
 
@@ -27,7 +29,37 @@ INPUT_DATA = common.read_text_to_list_of_tuples("input/input_day_2.txt", delimit
 # Only numbers that are exactly two equal-length digit blocks concatenated are “invalid.” “101” has three digits, so it can’t be split into two equal halves; you ignore it in the invalid-check logic.
 # Adding up all the invalid IDs at the end = solution
 
-def solve_invalid_product_ids(ranges: List[Tuple[int, int]]):
+
+def part_1(s: str) -> bool:
+    mid = len(s) // 2
+    left = s[:mid]
+    right = s[mid:]
+    # if two halves are the same append to invalid invalid_ids
+    if left == right:
+        return True
+    
+def part_2(product_id: str) -> bool:
+    # Invalid if product_id is made of some digit block repeated at least twice (covers entire string)
+    length = len(product_id)
+    if length < 2:
+        return False
+    # Try block lengths that divide length
+    for block_size in range(1, length // 2 + 1):
+        # +1 because
+        # length = 6 → max block_size = 3
+        # range(1, 6 // 2) = range(1, 3) → tries 1, 2 (misses 3)
+        # range(1, 6 // 2 + 1) = range(1, 4) → tries 1, 2, 3 (ok)
+        if length % block_size != 0:
+            continue
+        repeat_count = length // block_size
+        if repeat_count < 2: # need at least two repeats
+            continue
+        block = product_id[:block_size]
+        if block * repeat_count == product_id:
+            return True
+    return False
+
+def solve_invalid_product_ids(ranges: List[Tuple[int, int]], part: str = "part_1") -> Tuple[int, List[int]]:
     """"""
     invalid_ids = []
     # loop over all numbers
@@ -45,19 +77,16 @@ def solve_invalid_product_ids(ranges: List[Tuple[int, int]]):
             # if current number start with zero as fist number
             if s.startswith("0"):
                 pass
-            else:
-                # if not even pass
-                if len(s) % 2 != 0:
-                    pass
+            else: # HERE CHANGE PART 2 --> two subfunctions
+                if part == "part_1":
+                    if len(s) % 2 != 0:
+                        pass
+                    boolean = part_1(s)
                 else:
-                    # else: check if two ghalves are the same
-                    mid = len(s) // 2
-                    left = s[:mid]
-                    right = s[mid:]
-
-                    # if two halves are the same append to invalid invalid_ids
-                    if left == right:
-                        invalid_ids.append(current_number)
+                    boolean = part_2(s)
+                    
+                if boolean:
+                    invalid_ids.append(current_number)
 
             # current_number = current_number + 1
             current_number = current_number + 1
@@ -66,7 +95,10 @@ def solve_invalid_product_ids(ranges: List[Tuple[int, int]]):
     return sum(invalid_ids), invalid_ids
 
 if __name__ == "__main__":
-    total, ids = solve_invalid_product_ids(INPUT_DATA)
+    total, ids = solve_invalid_product_ids(INPUT_DATA, part="part_1")
+    print(f"Sum of invalid IDs: {total}")
+    print(f"Invalid IDs count: {len(ids)}")
+    total, ids = solve_invalid_product_ids(INPUT_DATA, part="part_2")
     print(f"Sum of invalid IDs: {total}")
     print(f"Invalid IDs count: {len(ids)}")
         

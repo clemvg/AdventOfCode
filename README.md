@@ -112,3 +112,14 @@ So three working options for now:
 
 Other option that currently does not work:
 - in `.env` to modify PYTHONPATH - though I updated `settings.json` vscode
+
+## Push to GitHub
+
+```bash
+git init
+git add .
+git commit -m "Initial commit"
+git remote add origin https://github.com/YOUR_USERNAME/REPO_NAME.git
+git branch -M main
+git push -u origin main
+```
