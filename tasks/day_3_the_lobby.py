@@ -30,7 +30,7 @@ def max_bank_joltage(bank: int) -> int:
     Given a bank represented as an integer (digits 1-9), find the maximum two-digit
     number formed by selecting two digits in their original order.
     """
-    # TODO: make more generalizable to n-digit numbers
+    # TODO: make more generalizable to n-digit numbers, recursive ? 
     s = str(bank)
     if len(s) < 2:
         raise ValueError("Bank must have at least two digits.")
@@ -55,23 +55,51 @@ def max_bank_joltage(bank: int) -> int:
 
     return best_two_digit_so_far
 
+def part_2_generalized_max_bank_joltage(bank: int, k: int) -> int: 
+    # OTHER APPROACH: stack and push number to stack, pop when needed to form n-digit number
+    """
+    Greedy idea paritally got via AI: remove up to n-k smaller leading digits to favor larger digits earlier.
+    """
+    digits = list(str(bank))
+    n = len(digits)
+    if k <= 0 or k > n:
+        raise ValueError("k must be between 1 and the number of digits in the bank")
 
-def total_output_joltage(banks: list[int]) -> int:
+    # nmber digits to remove to get k digits
+    removals = n - k
+    result_stack: list[str] = []
+
+    for digit in digits:
+        # while we can remove digits and the current digit is greater than the last in stack,
+        # pop from stack to favor larger digits earlier
+        while removals > 0 and result_stack and digit > result_stack[-1]:
+            result_stack.pop()
+            # you can safely pop because the first encountered digit cannot be placed after the current digit (order preserved)
+            removals = removals - 1
+        result_stack.append(digit)
+
+    # if no pops happen eg 987654321, trim from the end to get exactly k digits
+    best_k_digits = result_stack[:k]
+    return int("".join(best_k_digits)) # convert back strings to integer
+
+def total_output_joltage(banks: list[int], k: int) -> int:
     # warpper for simple summation
-    return sum(max_bank_joltage(bank) for bank in banks)
+    return sum(part_2_generalized_max_bank_joltage(bank, k) for bank in banks)
 
 
 def solve_day_3() -> tuple[int, int]:
     """
     Returns (example_total, input_total)
     """
-    example_total = total_output_joltage(EXAMPLE)
-    input_total = total_output_joltage(INPUT_DATA)
-    return example_total, input_total
+    example_total = total_output_joltage(EXAMPLE, 2)
+    input_total = total_output_joltage(INPUT_DATA, 2)
+    input_total_k12 = total_output_joltage(INPUT_DATA, 12)
+    return example_total, input_total, input_total_k12
 
 
 if __name__ == "__main__":
-    example_total, input_total = solve_day_3()
+    example_total, input_total, input_total_k12 = solve_day_3()
     print(f"Day 3 - Example total output joltage: {example_total}")
     print(f"Day 3 - Input total output joltage: {input_total}")
+    print(f"Day 3 - Input total output joltage (k=12): {input_total_k12}")
 
