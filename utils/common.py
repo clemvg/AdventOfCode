@@ -10,6 +10,12 @@ def read_text_to_list_of_strings(path: str , strip: bool = True) -> List[str]:
         lines = f.read().splitlines() if strip else f.readlines()
     return lines
 
+# TODO: merge with prev def by adding output_var_type arg
+def read_text_to_list_of_ints(path: str, strip: bool = True) -> List[int]:
+    """Read a text file line by line and return a list of integers."""
+    with open(path, "r", encoding="utf-8") as f:
+        lines = f.read().splitlines() if strip else f.readlines()
+    return [int(line) for line in lines if line.strip()]
 
 def read_text_to_list_of_tuples(path: str, delimiter: str = "-") -> List[Tuple[int, ...]]:
     with open(path, "r", encoding="utf-8") as f:
