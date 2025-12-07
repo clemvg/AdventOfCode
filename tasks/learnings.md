@@ -19,3 +19,9 @@ todo
 - Clean code and var names is easier to debug and reason of my first buggy solution especially for on-the-fly modifications.
 
 ## Day 6: The Trash Compactor
+
+- Equal padding of lines via line.ljust(max_width)
+- While loop of cols might be interesting to spot whitespace columns between number columns
+- Not working with while loop suggests using the prior parse_input function for part 1 and adding whitespaces to the left (because right-aligned) to have max equal length of the numbers
+
+## Day 7: Laboratories
