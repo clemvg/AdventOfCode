@@ -1,4 +1,4 @@
-"""Day 3: The Lobby."""
+"""Day 4: The Printing Department."""
 from utils import common
 from typing import List
 
