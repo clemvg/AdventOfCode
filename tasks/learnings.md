@@ -51,12 +51,12 @@ Both approaches are present in the solution file.
 
 ### Algorithm Comparison
 
-| Aspect | Part 1 (Event Counting) | Part 2 (Path Counting) |
-|--------|-------------------------|------------------------|
-| **Method** | BFS simulation | Recursive DP |
-| **Data Structure** | List of active beams | Memo dictionary |
-| **Question** | "When do splits happen?" | "How many ways to exit?" |
-| **Complexity** | O(splits × beams) | O(rows × cols) |
+| Aspect             | Part 1 (Event Counting)  | Part 2 (Path Counting)   |
+| ------------------ | ------------------------ | ------------------------ |
+| **Method**         | BFS simulation           | Recursive DP             |
+| **Data Structure** | List of active beams     | Memo dictionary          |
+| **Question**       | "When do splits happen?" | "How many ways to exit?" |
+| **Complexity**     | O(splits × beams)        | O(rows × cols)           |
 
 ### Example Walkthrough
 ```
@@ -77,3 +77,12 @@ Result: Total number of complete paths
 **Key Insight**: Part 1 simulates the physical process; Part 2 calculates mathematical possibilities.
 
 - TODO: Reproduce Part 2 independently (required AI assistance)
+
+## Day 8: Junction Box Circuits
+
+### Key Learnings
+- **heapq.heappush**: Works with tuples `(distance, idx_a, idx_b)` - automatically sorts by distance
+- **Pre-computation**: Calculate all O(n²) distances once instead of recalculating repeatedly  
+- **Component tracking**: Dictionary + sets `{component_id: {node_set}}`
+
+**Performance**: Brute force O(k × n² × c) vs efficient O(n² log n) with heapq pre-sorting
