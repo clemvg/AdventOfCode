@@ -36,10 +36,18 @@ Two fundamentally different problems requiring different approaches:
 - **Key**: Track visited splitters to avoid double-counting
 
 **Part 2: Path Combinatorics** - "How many different complete journeys are possible?"
-- **Strategy**: Recursive approach with memoization
+**Strategy 1: Recursive approach with memoization**
 - **Focus**: Calculate mathematical combinations of all possible routes
 - **Pattern**: Position-based memoization with return counts
 - **Key**: Memoization prevents recalculating the same subproblems
+
+**Strategy 2: Bottom-up Dynamic Programming**
+- **Focus**: Work backwards from bottom row to eliminate recursion
+- **Pattern**: Build timeline counts layer by layer from bottom to top
+- **Key**: Each position's count = sum of its children's counts (for splitters)
+- **Advantage**: No recursion stack overhead, more intuitive flow
+
+Both approaches are present in the solution file. 
 
 ### Algorithm Comparison
 
