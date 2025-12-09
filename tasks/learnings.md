@@ -25,3 +25,47 @@ todo
 - Not working with while loop suggests using the prior parse_input function for part 1 and adding whitespaces to the left (because right-aligned) to have max equal length of the numbers
 
 ## Day 7: Laboratories
+
+### Core Concept
+Two fundamentally different problems requiring different approaches:
+
+**Part 1: Event Simulation** - "How many splitting events occur during the simulation?"
+- **Strategy**: BFS/while loop with beam tracking
+- **Focus**: Simulate the process, count events as they happen
+- **Pattern**: Standard left/right beam creation pattern
+- **Key**: Track visited splitters to avoid double-counting
+
+**Part 2: Path Combinatorics** - "How many different complete journeys are possible?"
+- **Strategy**: Recursive approach with memoization
+- **Focus**: Calculate mathematical combinations of all possible routes
+- **Pattern**: Position-based memoization with return counts
+- **Key**: Memoization prevents recalculating the same subproblems
+
+### Algorithm Comparison
+
+| Aspect | Part 1 (Event Counting) | Part 2 (Path Counting) |
+|--------|-------------------------|------------------------|
+| **Method** | BFS simulation | Recursive DP |
+| **Data Structure** | List of active beams | Memo dictionary |
+| **Question** | "When do splits happen?" | "How many ways to exit?" |
+| **Complexity** | O(splits × beams) | O(rows × cols) |
+
+### Example Walkthrough
+```
+Part 1 - Event Counting:
+Step 1: [Beam at S]
+Step 2: [Beam hits first ^] → COUNT +1, create [BeamLeft, BeamRight] 
+Step 3: [BeamLeft hits next ^, BeamRight continues] → COUNT +1 for new splitter
+Result: Total number of unique split events
+
+Part 2 - Path Counting:
+From S: How many ways to reach bottom?
+├── If go through splitter: left_ways + right_ways
+├── If continue straight: same as next position
+└── Recursively calculate for each position
+Result: Total number of complete paths
+```
+
+**Key Insight**: Part 1 simulates the physical process; Part 2 calculates mathematical possibilities.
+
+- TODO: Reproduce Part 2 independently (required AI assistance)

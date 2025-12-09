@@ -6,7 +6,6 @@ sys.path.append(
     "/Users/clementvangoethem/Library/Mobile Documents/com~apple~CloudDocs/Code_projects/AdventOfCode"
 )
 from utils import common
-from typing import List
 from typing import List, Tuple
 
 EXAMPLE = [
@@ -28,7 +27,7 @@ EXAMPLE = [
     "...............",
 ]  # 21 times splitted and not 22 ^ because once not splitted
 
-INPUT_PATH = "input/input_day_7.txt"
+INPUT_PATH = "/Users/clementvangoethem/Library/Mobile Documents/com~apple~CloudDocs/Code_projects/AdventOfCode/input/input_day_7.txt"
 INPUT_DATA = common.read_text_to_list_of_strings(
     INPUT_PATH
 )  # stripped by default
@@ -111,33 +110,87 @@ def part1(data, start_position) -> int:
     return split_counter
 
 
-def part2(data) -> int:
+def count_paths(data, row, col, memo):
+    """Recursively count paths from (row, col) to the bottom of the grid.
+    Args:
+        data: The grid representing the laboratory.
+        row: Current row position.
+        col: Current column position.
+        memo: A dictionary for memoization to store already computed paths.
+        Memo is here the arg passed key to avoid recomputation and exponential blowup.
+    Returns:
+        The number of valid paths from (row, col) to the bottom."""
+    
+    rows, cols = len(data), len(data[0]) # optional could pass arg also outside this function, though data still needed to access cell content
+    
+    # RULES 
+    # if the beam has exited the bottom of the grid, that's a valid timeline
+    if row >= rows:
+        return 1
+    # if the beam has exited the grid to the left or right, that's not a valid timeline
+    if col < 0 or col >= cols:
+        return 0
+    # if we've already computed the number of paths from this position, return it
+    # recursive memoization step
+    if (row, col) in memo:
+        return memo[(row, col)]
+
+    # CELL CONTENT
+    cell = data[row][col]
+    # If the cell is empty or the start, continue moving down
+    if cell == '.' or cell == 'S':
+        result = count_paths(data, row + 1, col, memo)
+    # If the cell is a splitter '^', split into two beams: left and right
+    elif cell == '^':
+        left = count_paths(data, row + 1, col - 1, memo)   # Move down-left
+        right = count_paths(data, row + 1, col + 1, memo)  # Move down-right
+        # rules will be checked recursively
+        result = left + right  # Add the number of timelines from both splits
+    else: # optional
+        # other cell type is treated as a dead end
+        result = 0
+
+    # Store the result in the memo dictionary before returning.
+    memo[(row, col)] = result
+    return result
+
+def part2(data, start_position) -> int:
     """Solve part 2 of the challenge."""
-    # TODO: Implement part 2 solution
-    return 0
+    # Position based memoization is needed
+    
+    # Idea: not BFS but look at all possible paths recursively with memoization
+    # This function counts all possible timelines (paths) the beam can take
+    # from the starting position to the bottom of the grid, splitting at each '^' splitter.
+    
+    # It uses memoization to avoid recalculating the number of paths from the same position.
+    
+    # DISCLAIMER: part 2 required some help of dearest AI to be solved! 
+
+    memo = {}  # Dictionary to store results for (row, col) positions
+    start_row, start_col = start_position
+    return count_paths(data, start_row, start_col, memo)
 
 
 if __name__ == "__main__":
     # Parse input
-    parsed_data, start_pos_part_1 = parse_input(INPUT_DATA)
     example_data, start_pos = parse_input(EXAMPLE)
-    # print type of parsed data
     print(f"Start position: {start_pos}")
-    print(f"Parsed example data: {example_data}")
-    # todo for input data
 
-    # Part 1
-    print("=== Part 1 ===")
+    # Part 1 - Example
+    print("=== Part 1 (Example) ===")
     example_result1 = part1(example_data, start_pos)
     print(f"Example result: {example_result1}")
 
+    # Part 2 - Example
+    print("\n=== Part 2 (Example) ===")
+    example_result2 = part2(example_data, start_pos)
+    print(f"Example result: {example_result2}")
+    print("Expected: 40")
+
+    # Run on real input
+    print("\n=== Real Input ===")
+    parsed_data, start_pos_part_1 = parse_input(INPUT_DATA)
     result1 = part1(parsed_data, start_pos_part_1)
     print(f"Part 1 result: {result1}")
-
-    # Part 2
-    print("\n=== Part 2 ===")
-    # example_result2 = part2(example_data)
-    # print(f"Example result: {example_result2}")
-
-    # result2 = part2(parsed_data)
-    # print(f"Part 2 result: {result2}")
+    result2 = part2(parsed_data, start_pos_part_1)
+    print(f"Part 2 result: {result2}")
