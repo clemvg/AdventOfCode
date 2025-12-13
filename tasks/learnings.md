@@ -86,3 +86,12 @@ Result: Total number of complete paths
 - **Component tracking**: Dictionary + sets `{component_id: {node_set}}`
 
 **Performance**: Brute force O(k × n² × c) vs efficient O(n² log n) with heapq pre-sorting
+
+## Day 9: Rectangles
+
+- Parse coordinates as tuples
+- Define opposite corns with x1 != x2 and y1 != y2 of a rectangle
+- Valid rectangle: only two chosen corners needs to be red tiles (#)
+- Calculate area by abs(x1-x2) * abs(y2-y1)
+- I did not consider lines ! 
+- Interesting to plot the lines
